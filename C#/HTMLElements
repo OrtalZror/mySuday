@@ -1,0 +1,61 @@
+using System;
+using System.Collections;
+
+class MainClass {
+
+  public static string HTMLElements(string str)
+    {
+
+        Stack html = new Stack();
+        string tempTag = "";
+        bool isOpenTag = false;
+        bool isCloseTag = false;
+
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (str[i] == '<')
+            {
+                if (str[i + 1] == '/')
+                    isCloseTag = true;
+                else
+                    isOpenTag = true;
+            }
+            else if ((isOpenTag || isCloseTag) && (str[i] != '>'))
+            {
+                if (str[i] != '/')
+                    tempTag += str[i];
+            }
+            else if (str[i] == '>')
+            {
+                if (isCloseTag)
+                {
+                    string topTag = (string)html.Pop();
+                    if (topTag != tempTag)
+                        return topTag;
+                }
+                else
+                {
+                    html.Push(tempTag);
+                }
+
+                tempTag = "";
+                isOpenTag = false;
+                isCloseTag = false;
+
+            }
+
+        }
+        
+        if (html.Count == 0)
+            return "true";
+        else
+            return (string)html.Pop();
+
+    }
+
+  static void Main() {  
+    // keep this function call here
+    Console.WriteLine(HTMLElements(Console.ReadLine()));
+  } 
+
+}
