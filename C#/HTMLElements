@@ -1,3 +1,5 @@
+
+
 using System;
 using System.Collections;
 
@@ -59,3 +61,42 @@ class MainClass {
   } 
 
 }
+
+
+
+           ////////// //////////////////////////////////////////////מחזיר true/false                                                                                                                           
+  public static bool bracket(string str)//<div><p>hello</p><em>jh</div>
+    {
+        Stack<string> stack = new Stack<string>();
+        int i1 = 0, i2 = 0;
+        while (i1 != -1 && i2 != -1)
+        {
+            i1 = str.IndexOf("<", i2);
+            i2 = str.IndexOf(">", i2 + 1);
+            if (i1 != -1 && i2 != -1)
+            {
+                if (str.Substring(i1 + 1, 1) == "/")//close
+                {
+                    if (stack.Peek() != str.Substring(i1 + 2, (i2) - (i1 + 2)))
+                    {
+                        Console.WriteLine("current   " + str.Substring(i1 + 2, (i2) - (i1 + 2)));
+                        Console.WriteLine("error    " + stack.Peek());
+                        return false;
+                    }
+                    else
+                    {
+                        stack.Pop();
+                    }
+                    Console.WriteLine("close  " + str.Substring(i1 + 2, (i2) - (i1 + 2)));
+                }
+                else//open
+                {
+                    stack.Push(str.Substring(i1 + 1, (i2) - (i1 + 1)));
+                    Console.WriteLine("open  " + str.Substring(i1 + 1, (i2) - (i1 + 1)));
+                }
+            }
+
+        }
+        return true;
+    }
+

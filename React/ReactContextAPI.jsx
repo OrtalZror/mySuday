@@ -1,49 +1,40 @@
-import React, { useState, useContext, createContext } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, createContext, useContext } from "react"
+import ReactDOM from "react-dom"
 
-const languages = ['JavaScript', 'Python'];
-const AppContext = createContext();
-const AppProvider = (props)=>{
-  const [lang, setLang] = useState(languages[0])
-  return(
-  <AppContext.Provider value={{lang, setLang}}>
-    {props.children}
-  </AppContext.Provider>
-  )
-}
+const languages = ["JavaScript", "Python"]
+const LanguageContext = createContext({
+    languages,
+    language: languages[0],
+    setLanguage: () => {},
+})
 
-const App=()=> {
+function App() {
+    const [language, setLanguage] = useState(languages[0])
     return (
-      // implement Context here so can be used in child components
-      <AppProvider>
-        <MainSection />
-      </AppProvider>
-    );
+        <LanguageContext.Provider value={{ languages, language, setLanguage }}>
+            <MainSection />
+        </LanguageContext.Provider>
+    )
 }
 
-
-const MainSection =()=> {
-
-    const {lang, setLang} = useContext(AppContext)
-
-    const toggleLang=(e)=>{
-      e.preventDefault()
-      if(lang===languages[0]){
-        setLang(languages[1])
-      }
-      if(lang===languages[1]){
-        setLang(languages[0])
-      }
+function MainSection() {
+    const { languages, language, setLanguage } = useContext(LanguageContext)
+    const currentIndex = languages.indexOf(language)
+    const toggleLanguage = () => {
+        if (currentIndex === languages.length - 1) {
+            setLanguage(languages[0])
+        } else {
+            setLanguage(languages[currentIndex + 1])
+        }
     }
     return (
-      <div>
-        <p id="favoriteLanguage">favoriteprograminglanguage:{lang}
-        <button id="changeFavorite" onClick={toggleLang}>togglelanguage</button>
-      </div>
+        <div>
+            <p id="favoriteLanguage">{`Favorite programming language: ${language}`}</p>
+            <button id="changeFavorite" onClick={toggleLanguage}>
+                Toggle language
+            </button>
+        </div>
     )
-  }
+}
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById("root"))
